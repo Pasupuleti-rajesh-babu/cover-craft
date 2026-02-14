@@ -9,15 +9,20 @@ export const Navbar: React.FC = () => {
 
     const login = useGoogleLogin({
         onSuccess: tokenResponse => {
+            console.log("Login Success:", tokenResponse);
             fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
                 headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
             })
                 .then(res => res.json())
                 .then(userInfo => {
+                    console.log("UserInfo:", userInfo);
                     setUser(userInfo);
                     localStorage.setItem('google_user', JSON.stringify(userInfo));
-                });
+                })
+                .catch(err => console.error("UserInfo Error:", err));
         },
+        onError: error => console.error("Login Failed:", error),
+        flow: 'implicit', // Explicitly request implicit flow
     });
 
     useEffect(() => {
