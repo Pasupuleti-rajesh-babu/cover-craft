@@ -1,8 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { Copy, Download, Edit2, FileText, Check, Sparkles, Settings, ArrowRight, Loader2 } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Copy, Download, Edit2, FileText, Check, Sparkles, Settings, ArrowRight } from 'lucide-react';
 import { Navbar } from '../components/Navbar';
 import { Button } from '../components/Button';
-import { Card } from '../components/Card';
 import { clsx } from 'clsx';
 import { motion, AnimatePresence } from 'framer-motion';
 import { generateCoverLetter } from '../utils/gemini';

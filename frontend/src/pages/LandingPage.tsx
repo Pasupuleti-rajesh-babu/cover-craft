@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle, FileText, Download, Zap } from 'lucide-react';
+import { ArrowRight, CheckCircle, Download, Zap } from 'lucide-react';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Navbar } from '../components/Navbar';
