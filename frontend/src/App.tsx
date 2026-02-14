@@ -4,6 +4,7 @@ import { LandingPage } from './pages/LandingPage';
 import { AppPage } from './pages/AppPage';
 
 import { GoogleOAuthProvider } from '@react-oauth/google';
+import { ProtectedRoute } from './components/ProtectedRoute';
 
 function App() {
   const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
@@ -11,9 +12,20 @@ function App() {
   return (
     <GoogleOAuthProvider clientId={clientId}>
       <Router>
+
+
+
+
         <Routes>
           <Route path="/" element={<LandingPage />} />
-          <Route path="/app" element={<AppPage />} />
+          <Route
+            path="/app"
+            element={
+              <ProtectedRoute>
+                <AppPage />
+              </ProtectedRoute>
+            }
+          />
         </Routes>
       </Router>
     </GoogleOAuthProvider>
