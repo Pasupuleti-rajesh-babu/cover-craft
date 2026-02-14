@@ -1,11 +1,46 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle, Download, Zap } from 'lucide-react';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Button } from '../components/Button';
 import { Card } from '../components/Card';
 import { Navbar } from '../components/Navbar';
 
 export const LandingPage: React.FC = () => {
+    const navigate = useNavigate();
+    const [user, setUser] = useState<any>(null);
+
+    useEffect(() => {
+        const storedUser = localStorage.getItem('google_user');
+        if (storedUser) {
+            setUser(JSON.parse(storedUser));
+        }
+    }, []);
+
+    const login = useGoogleLogin({
+        onSuccess: tokenResponse => {
+            fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+            })
+                .then(res => res.json())
+                .then(userInfo => {
+                    localStorage.setItem('google_user', JSON.stringify(userInfo));
+                    setUser(userInfo);
+                    navigate('/app');
+                })
+                .catch(err => console.error("UserInfo Error:", err));
+        },
+        onError: error => console.error("Login Failed:", error),
+        flow: 'implicit',
+    });
+
+    const handleGenerateClick = (e: React.MouseEvent) => {
+        if (!user) {
+            e.preventDefault();
+            login();
+        }
+    };
+
     return (
         <div className="min-h-screen bg-slate-50 flex flex-col font-sans">
             <Navbar />
@@ -20,9 +55,9 @@ export const LandingPage: React.FC = () => {
                     Stop staring at a blank page. Generate a tailored, human-sounding cover letter that highlights your skills and fits the job description perfectly.
                 </p>
                 <div className="mt-10 flex justify-center gap-4">
-                    <Link to="/app">
+                    <Link to="/app" onClick={handleGenerateClick}>
                         <Button size="lg" className="gap-2">
-                            Generate Cover Letter <ArrowRight className="h-5 w-5" />
+                            {user ? "Go to Dashboard" : "Generate Cover Letter"} <ArrowRight className="h-5 w-5" />
                         </Button>
                     </Link>
                     <a href="#how-it-works">
@@ -44,7 +79,7 @@ export const LandingPage: React.FC = () => {
             </section>
 
             {/* Features */}
-            <section className="bg-white py-24 sm:py-32">
+            <section id="how-it-works" className="bg-white py-24 sm:py-32">
                 <div className="container mx-auto px-4">
                     <div className="mx-auto max-w-2xl text-center">
                         <h2 className="text-3xl font-bold tracking-tight text-slate-900 sm:text-4xl">Everything you need to stand out</h2>
