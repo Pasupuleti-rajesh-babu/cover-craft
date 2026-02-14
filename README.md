@@ -60,3 +60,4 @@ CoverCraft is a premium SaaS-style web application that generates strong, human-
 ## License
 
 MIT
+# cover-craft
